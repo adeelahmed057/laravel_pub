@@ -27,7 +27,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('date');
-        Schema::dropIfExists('time');
+        Schema::table('users', function ($table) {
+            $table->dropColumn('date');
+            $table->dropColumn('time');
+        });
     }
 };
