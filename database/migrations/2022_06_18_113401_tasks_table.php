@@ -14,8 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->string('date');
-            $table->string('time');
+            $table->string('date', 10);
+            $table->string('time', 2);
+            $table->unique(['date', 'time']);
         });
     }
 
@@ -26,6 +27,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tasks');
+        Schema::dropIfExists('date');
+        Schema::dropIfExists('time');
     }
 };
