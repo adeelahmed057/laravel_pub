@@ -34,7 +34,6 @@
 
                 <label for="name">Task</label>
                 <input type="text" name="name" id="task" class="form-control {{ $errors->first('name') ? 'is-invalid' : '' }}" value=" {{ old('name') }}">
-                <div class="invalid-feedback">Please Enter Task</div>
                 @if ($errors->has('name'))
                 <span class="text-danger">{{ $errors->first('name') }}</span>
                 @endif
@@ -58,7 +57,7 @@
             <div class="form-group">
                 <label for="time">Time</label>
                 <select class="form-control {{ $errors->first('time') ? 'is-invalid' : '' }}" name="time">
-                    <option selected>Please Select Time</option>>
+                    <option value="" selected>Please Select Time</option>>
                     <option value="AM" {{ old('time') == 'AM' ? 'SELECTED' : '' }}>AM</option>
                     <option value="PM" {{ old('time')=='PM' ? 'SELECTED' : '' }}>PM</option>
                 </select>

@@ -27,9 +27,10 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('users', function ($table) {
-            $table->dropColumn('date');
+        Schema::table('tasks', function ($table) {
+            $table->dropUnique(['date', 'time']);
             $table->dropColumn('time');
+            $table->dropColumn('date');
         });
     }
 };
