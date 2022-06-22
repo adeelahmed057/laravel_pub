@@ -4,18 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Task;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 
-class TaskController extends Controller
-{
+class TaskController extends Controller {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index() {
         $tasks = Task::orderBy('created_at', 'asc')->get();
- 
+
         return view('tasks', [
             'tasks' => $tasks
         ]);
@@ -26,10 +26,7 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-    
-     
+    public function create() {
     }
 
     /**
@@ -38,22 +35,27 @@ class TaskController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'name' => 'required|max:12|regex:/^[\p{L}\s-]+$/u',
+    public function store(Request $request) {
+        $date = $request->date;
+        $time = $request->time;
+        $validated = $request->validate(['name' => 'required|min:5',
+            'date' => [
+                'required',
+                Rule::unique('tasks')->where(function ($query) use ($date, $time) {
+                    return $query->where('date', $date)
+                        ->where('time', $time);
+                })
+            ],
+            'time' => 'required',
 
-        ]);
-
-        $validatedData = $request->validate([
-            'name' => ['required', 'max:12','regex:/^[\p{L}\s-]+$/u'],
         ]);
 
         $task = new Task;
         $task->name = $request->name;
+        $task->date = $request->date;
+        $task->time = $request->time;
         $task->save();
         return back()->with('create', 'Task Has Been Created');
-
     }
 
     /**
@@ -62,8 +64,7 @@ class TaskController extends Controller
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function show(Task $task)
-    {
+    public function show(Task $task) {
         //
     }
 
@@ -73,8 +74,7 @@ class TaskController extends Controller
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function edit(Task $task)
-    {
+    public function edit(Task $task) {
         //
     }
 
@@ -85,8 +85,7 @@ class TaskController extends Controller
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateTaskRequest $request, Task $task)
-    {
+    public function update(Request $request, Task $task) {
         //
     }
 
@@ -96,8 +95,7 @@ class TaskController extends Controller
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         Task::findOrFail($id)->delete();
         return redirect('/tasks')->with('delete', 'Task Has Been Deleted');
     }
