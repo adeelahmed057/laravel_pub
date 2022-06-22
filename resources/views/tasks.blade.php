@@ -57,7 +57,7 @@
             <div class="form-group">
                 <label for="time">Time</label>
                 <select class="form-control {{ $errors->first('time') ? 'is-invalid' : '' }}" name="time">
-                    <option value="" selected>Please Select Time</option>>
+                    <option value="">Please Select Time</option>
                     <option value="AM" {{ old('time') == 'AM' ? 'SELECTED' : '' }}>AM</option>
                     <option value="PM" {{ old('time')=='PM' ? 'SELECTED' : '' }}>PM</option>
                 </select>
